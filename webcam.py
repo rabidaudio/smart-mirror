@@ -3,14 +3,16 @@ import cv2
 import time
 import sys
 
-debug = sys.argv[0] == 'debug'
+debug = len(sys.argv) > 1 and sys.argv[1] == 'debug'
 
 cap = cv2.VideoCapture(0)
+cap.set(cv2.cv.CV_CAP_PROP_FPS, 1)
 
 ret, frame = cap.read()
 
 #Load a cascade file for detecting faces
-face_cascade = cv2.CascadeClassifier('/usr/share/opencv/haarcascades/haarcascade_frontalface_alt.xml')
+#face_cascade = cv2.CascadeClassifier('./haarcascade_frontalface_alt.xml')
+face_cascade = cv2.CascadeClassifier('./haarcascade_frontalface_default.xml')
 
 # source: https://github.com/Aravindlivewire/Opencv/tree/master/haarcascade
 # palm_cascade = cv2.CascadeClassifier('./palm.xml')
@@ -60,6 +62,8 @@ while(ret):
     elif has_faces and not now_faces:
         print "!e: motionend"
         has_faces = False
+
+    #time.sleep(0.1)
 
 cap.release()
 if(debug):
