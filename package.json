@@ -4,7 +4,7 @@
   "description": "The fairest of them all",
   "main": "main.js",
   "scripts": {
-    "install": "bower install",
+    "install": "node_modules/.bin/bower install",
     "start": "node_modules/.bin/electron main.js ",
     "microphone-debug": "node_modules/.bin/electron scripts/microphone-debug/main.js",
     "train-model": "node_modules/.bin/electron scripts/train-model.js",
@@ -32,8 +32,6 @@
     "angular-i18n": "^1.5.5",
     "bower": "^1.7.9",
     "electron": "^1.4.4",
-    "install": "^0.8.1",
-    "npm": "^3.8.8",
     "wiredep-cli": "^0.1.0"
   },
   "dependencies": {
