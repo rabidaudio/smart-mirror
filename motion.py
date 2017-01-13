@@ -3,9 +3,12 @@ import cv2
 import numpy as np
 from time import time
 
+# period = 5
+
+# http://www.pyimagesearch.com/2015/06/01/home-surveillance-and-motion-detection-with-the-raspberry-pi-python-and-opencv/
+
 threshold = 5
 minMotion = 2
-motionTimeout = 15
 
 cap = cv2.VideoCapture(0)
 
@@ -14,9 +17,7 @@ ret, frame = cap.read()
 gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
 avg = gray.copy().astype("float")
 
-# http://www.pyimagesearch.com/2015/06/01/home-surveillance-and-motion-detection-with-the-raspberry-pi-python-and-opencv/
 sensingMotion = False
-lastMotion = 0
 
 while(ret):
 
@@ -32,34 +33,17 @@ while(ret):
   thresh = cv2.dilate(thresh, None, iterations=2)
   m = np.mean(thresh)
 
-  t = time()
-  if m > minMotion:
-    if not sensingMotion:
-      sensingMotion = True
-      print("motionstart")
-
-    lastMotion = t
-  else:
-    if sensingMotion and (t - lastMotion) > motionTimeout:
-      print("motionend")
-      sensingMotion = False
-  # (cnts, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-  # for c in cnts:
-  #   if cv2.contourArea(c) > 50:
-  #     (x, y, w, h) = cv2.boundingRect(c)
-  #     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-  # diff = gray - background
-  # e = cv2.erode(np.float8(diff), 5)
-  # t, diff = cv2.threshold((gray - background), 0, 255, cv2.THRESH_BINARY_INV)
-
-  # dist = cv2.distanceTransform(diff, cv2.cv.CV_DIST_L2, 5)
+  newMotion = m > minMotion
+  if newMotion and not sensingMotion:
+    sensingMotion = True
+    print("motionstart")
+  elif not newMotion and sensingMotion:
+    print("motionend")
+    sensingMotion = False
 
   cv2.imshow('image', thresh)
   if cv2.waitKey(1) & 0xFF == ord('q'):
     break
-
-  background = gray
 
   # time.sleep(1)
   # t = time()
