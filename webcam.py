@@ -1,12 +1,14 @@
 #!/usr/bin/env python2
 import cv2
-import time
+from time import time
 import sys
 
 debug = len(sys.argv) > 1 and sys.argv[1] == 'debug'
 
+period = 1
+
 cap = cv2.VideoCapture(0)
-cap.set(cv2.cv.CV_CAP_PROP_FPS, 1)
+#cap.set(cv2.cv.CV_CAP_PROP_FPS, 1)
 
 ret, frame = cap.read()
 
@@ -63,7 +65,12 @@ while(ret):
         print "!e: motionend"
         has_faces = False
 
-    #time.sleep(0.1)
+    # time.sleep(1)
+    t = time()
+    end = t + period
+    while t < end:
+        cap.grab()
+        t = time()
 
 cap.release()
 if(debug):
